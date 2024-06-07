@@ -233,5 +233,14 @@ app.post('/rooms', async (req, res) => {
   }
 });
 
+app.get('/rooms', async (req, res) => {
+  try {
+    const rooms = await Rooms.find();
+    res.json(rooms);
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 server.listen(process.env.PORT || 4000, () => 'Server is running on port 4000');
