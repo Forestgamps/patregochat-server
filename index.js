@@ -37,7 +37,7 @@ const JWT_SECRET = 'bro';
 const io = new Server(server, {
   cors: {
     //origin: 'http://localhost:3000',
-    origin: 'https://patregochat-client.onrender.com/',
+    origin: 'https://patregochat-client.onrender.com',
     methods: ['GET', 'POST'],
   },
 });
@@ -213,4 +213,4 @@ app.post('/upload', async (req, res) => {
 });
 
 
-server.listen(4000, () => 'Server is running on port 4000');
+server.listen(process.env.PORT || 4000, () => 'Server is running on port 4000');
