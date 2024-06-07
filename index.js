@@ -7,6 +7,7 @@ const { Server } = require('socket.io');
 const mongoose = require('mongoose');
 const Mess = require('./models/message');
 const User = require('./models/user');
+const Rooms = require('./models/rooms');
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -209,6 +210,26 @@ app.post('/upload', async (req, res) => {
     res.send('File uploaded and user profile updated!');
   } catch (err) {
     res.status(500).send(err);
+  }
+});
+
+app.post('/rooms', async (req, res) => {
+  const { name } = req.body;
+
+  if (!name) {
+    return res.status(400).json({ error: 'Room name is required' });
+  }
+
+  try {
+    const room = new Rooms({ name });
+    await room.save();
+    res.status(201).json(room);
+  } catch (err) {
+    if (err.code === 11000) { // Проверка на уникальность имени комнаты
+      res.status(400).json({ error: 'Room name already exists' });
+    } else {
+      res.status(500).json({ error: 'Internal server error' });
+    }
   }
 });
 
